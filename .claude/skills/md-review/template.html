@@ -1,0 +1,137 @@
+<title>{{TITLE}}</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single reading column (~72ch) under a slim sticky review bar; the doc is the page. */
+:root {
+  --bg: #fbfbfa;
+  --surface: #f2f3f1;
+  --fg: #1f2421;
+  --muted: #646b67;
+  --rule: #dfe2df;
+  --accent: #2f6f5e;
+  --accent-soft: #e3efea;
+  --code-bg: #f0f1ef;
+  --font-body: "Inter", "Noto Sans JP", system-ui, -apple-system, "Hiragino Sans", sans-serif;
+  --font-head: "Inter", "Noto Sans JP", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #171a19; --surface: #1f2321; --fg: #e4e7e5; --muted: #9aa29e;
+    --rule: #2e3431; --accent: #7cc4ad; --accent-soft: #23332e; --code-bg: #212624;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #171a19; --surface: #1f2321; --fg: #e4e7e5; --muted: #9aa29e;
+  --rule: #2e3431; --accent: #7cc4ad; --accent-soft: #23332e; --code-bg: #212624;
+  color-scheme: dark;
+}
+html, body { background: var(--bg); color: var(--fg); }
+body { font-family: var(--font-body); font-size: 16px; line-height: 1.75; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+
+.bar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: var(--surface); border-bottom: 1px solid var(--rule);
+  padding-block: 10px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.bar-inner { max-width: 72ch; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; font-size: 13px; line-height: 1.4; }
+.bar-file { font-family: var(--font-mono); color: var(--muted); min-width: 0; overflow-wrap: anywhere; }
+.chip { font-weight: 600; font-size: 12px; letter-spacing: .04em; color: var(--accent); background: var(--accent-soft); border-radius: 999px; padding: 2px 10px; font-variant-numeric: tabular-nums; }
+.bar-hint { color: var(--muted); margin-left: auto; }
+
+main {
+  padding-block: 32px 96px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.doc { max-width: 72ch; margin: 0 auto; min-width: 0; }
+
+.note { border: 1px solid var(--rule); background: var(--surface); border-radius: 8px; padding: 10px 14px; font-size: 14px; color: var(--muted); margin-bottom: 28px; }
+.note strong { color: var(--fg); font-weight: 600; }
+
+.doc h1, .doc h2, .doc h3, .doc h4 { font-family: var(--font-head); line-height: 1.3; text-wrap: balance; letter-spacing: -.01em; }
+.doc h1 { font-size: 2rem; margin: 0 0 .6em; }
+.doc h2 { font-size: 1.45rem; margin: 2em 0 .6em; padding-bottom: .3em; border-bottom: 1px solid var(--rule); }
+.doc h3 { font-size: 1.15rem; margin: 1.6em 0 .5em; }
+.doc h4 { font-size: 1rem; margin: 1.4em 0 .4em; }
+.doc p, .doc ul, .doc ol, .doc blockquote, .doc table, .doc pre { margin: 0 0 1.1em; }
+.doc ul, .doc ol { padding-left: 1.5em; }
+.doc li + li { margin-top: .25em; }
+.doc li > input[type="checkbox"] { margin-right: .4em; }
+.doc a { color: var(--accent); text-underline-offset: 2px; }
+.doc blockquote { border-left: 3px solid var(--accent); padding: .2em 0 .2em 1em; color: var(--muted); }
+.doc hr { border: 0; border-top: 1px solid var(--rule); margin: 2em 0; }
+.doc code { font-family: var(--font-mono); font-size: .88em; background: var(--code-bg); border-radius: 4px; padding: .1em .35em; }
+.doc pre { background: var(--code-bg); border: 1px solid var(--rule); border-radius: 8px; padding: 14px 16px; overflow-x: auto; line-height: 1.55; }
+.doc pre code { background: none; padding: 0; font-size: .86em; }
+.table-wrap { overflow-x: auto; margin: 0 0 1.1em; }
+.doc table { border-collapse: collapse; font-size: .94em; margin: 0; }
+.doc th, .doc td { border: 1px solid var(--rule); padding: 6px 12px; text-align: left; vertical-align: top; }
+.doc th { background: var(--surface); font-weight: 600; }
+.doc img { max-width: 100%; }
+.raw { white-space: pre-wrap; font-family: var(--font-mono); font-size: 14px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (max-width: 520px) { .bar-hint { margin-left: 0; } .doc h1 { font-size: 1.6rem; } }
+</style>
+
+<header class="bar">
+  <div class="bar-inner">
+    <span class="chip">REV {{REV}}</span>
+    <span class="bar-file">{{SOURCE}}</span>
+    <span class="bar-hint">テキストを選択してコメント → Send to Claude</span>
+  </div>
+</header>
+
+<main>
+  <article class="doc">
+    <div class="note" id="rev-note" hidden></div>
+    <div id="content"><pre class="raw" id="raw"></pre></div>
+  </article>
+</main>
+
+<script type="application/json" id="md-source">{{MARKDOWN_JSON}}</script>
+<script type="application/json" id="rev-meta">{{META_JSON}}</script>
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+<script>
+(function () {
+  var md = JSON.parse(document.getElementById('md-source').textContent);
+  var meta = JSON.parse(document.getElementById('rev-meta').textContent);
+  var content = document.getElementById('content');
+
+  if (meta.note) {
+    var n = document.getElementById('rev-note');
+    n.innerHTML = '<strong>Rev ' + meta.rev + ' の変更:</strong> ';
+    n.appendChild(document.createTextNode(meta.note));
+    n.hidden = false;
+  }
+
+  // Fallback: raw Markdown stays visible if the CDN libraries did not load.
+  document.getElementById('raw').textContent = md;
+  if (!window.marked) return;
+
+  var html = marked.parse(md, { gfm: true, breaks: false });
+  if (window.DOMPurify) html = DOMPurify.sanitize(html);
+  content.innerHTML = html;
+
+  // Wide tables scroll inside their own box.
+  content.querySelectorAll('table').forEach(function (t) {
+    var w = document.createElement('div'); w.className = 'table-wrap';
+    t.parentNode.insertBefore(w, t); w.appendChild(t);
+  });
+  // Stable heading anchors so comments and replies can point at sections.
+  var seen = {};
+  content.querySelectorAll('h1,h2,h3,h4').forEach(function (h) {
+    var base = h.textContent.trim().toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-|-$/g, '') || 'section';
+    var id = base, i = 2; while (seen[id]) id = base + '-' + i++;
+    seen[id] = true; h.id = id;
+  });
+})();
+</script>
